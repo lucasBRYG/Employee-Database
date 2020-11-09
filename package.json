@@ -1,0 +1,30 @@
+{
+  "name": "employee-database",
+  "version": "1.0.0",
+  "description": "console application allows user to interact with employee tracking database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasBRYG/Employee-Database.git"
+  },
+  "keywords": [
+    "database",
+    "employee",
+    "track"
+  ],
+  "author": "Lucas Santiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucasBRYG/Employee-Database/issues"
+  },
+  "homepage": "https://github.com/lucasBRYG/Employee-Database#readme",
+  "dependencies": {
+    "asciiart-logo": "^0.2.6",
+    "console-table": "^0.1.2",
+    "inquirer": "^7.3.3",
+    "mysql": "^2.18.1"
+  }
+}
