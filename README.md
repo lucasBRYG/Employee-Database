@@ -2,6 +2,11 @@
 A console application that allows the use to interact with an employee tracking database.
 
 
+## Demo
+
+Check out a demo of the app here: https://drive.google.com/file/d/1h5ZNzWtN4lYAdE6ciBxlGBLaPKAk0IS5/view
+
+
 ---
 
 ### Table of Contents
@@ -32,9 +37,17 @@ Follow the prompts to add or view data.
 
 Select "Exit Employee Tracker", or enter "ctrl+c" into the cli, to end the application.
 
+## Images
 
 
 
+Screenshot of startup
+![Startup](./assets/images/et-open.png)
+
+
+
+Screeshot of data from db in table
+![Data Tables](./assets/images/et-dataTables.png)
 
 ## Author
 

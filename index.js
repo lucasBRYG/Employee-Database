@@ -309,6 +309,6 @@ function changeRole() {
             if (err) throw err;
             console.log(res.affectedRows + " employee updated!\n");
             mainMenu();
-        }
-    });
+        });
+    })
 }
