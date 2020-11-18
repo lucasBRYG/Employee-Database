@@ -23,7 +23,7 @@ CREATE TABLE roles (
 CREATE TABLE employees (
   employeeID INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30) NULL,
-  second_name VARCHAR(30) NULL,
+  last_name VARCHAR(30) NULL,
   role_id INT NOT NULL,
   manger_id INT NULL,
   PRIMARY KEY (employeeID),
