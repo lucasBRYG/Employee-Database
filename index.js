@@ -5,13 +5,13 @@ const asciiLogo = require("./assets/logo")
 
 console.log(asciiLogo);
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
 
     mainMenu();
-  });
+});
 
-function mainMenu(){
+function mainMenu() {
     inquirer.prompt([
         {
             type: "list",
@@ -24,33 +24,33 @@ function mainMenu(){
                 "Add a department",
                 "Add an employee",
                 "Add a job you need filled",
-                // "Change an employee's role",
+                "Change an employee's role",
                 "Exit Employee Tracker"
             ]
         }
     ]).then(response => {
-        switch(response.mainMenu) {
+        switch (response.mainMenu) {
             case "View all departments":
-                viewAllDepartments()
+                viewAllDepartments();
                 break;
             case "View all employees":
-                viewAllEmployees()
+                viewAllEmployees();
                 break;
             case "View all jobs":
-                viewAllJobs()
+                viewAllJobs();
                 break;
             case "Add a department":
-                addDepartment()
+                addDepartment();
                 break;
             case "Add an employee":
-                addEmployee()
+                addEmployee();
                 break;
             case "Add a job you need filled":
-                addRole()
+                addRole();
                 break;
-            // case "Change an employee's role":
-
-            //     break;
+            case "Change an employee's role":
+                changeRole();
+                break;
             case "Exit Employee Tracker":
                 console.clear();
                 connection.end();
@@ -60,7 +60,7 @@ function mainMenu(){
 }
 
 function viewAllDepartments() {
-    connection.query("SELECT * FROM departments", function(err, res) {
+    connection.query("SELECT * FROM departments", function (err, res) {
         if (err) throw err;
         console.table(res);
         mainMenu();
@@ -68,14 +68,14 @@ function viewAllDepartments() {
 }
 
 function viewAllEmployees() {
-    connection.query("SELECT * FROM employees", function(err, res){
+    connection.query("SELECT * FROM employees", function (err, res) {
         console.table(res);
         mainMenu();
     });
 }
 
 function viewAllJobs() {
-    connection.query("SELECT * FROM roles", function(err, res) {
+    connection.query("SELECT * FROM roles", function (err, res) {
         if (err) throw err;
         console.table(res);
         mainMenu();
@@ -93,7 +93,7 @@ function addDepartment() {
         newDepartment = {
             name: response.newDepartment
         };
-        connection.query("INSERT INTO departments SET ?", newDepartment, function(err, res) {
+        connection.query("INSERT INTO departments SET ?", newDepartment, function (err, res) {
             if (err) throw err;
             console.log(res.affectedRows + " role inserted!\n");
             mainMenu();
@@ -104,13 +104,13 @@ function addDepartment() {
 function addEmployee() {
     let roleArr = [];
     let managerArr = [];
-    connection.query("SELECT * FROM roles", function(err, res) {
+    connection.query("SELECT * FROM roles", function (err, res) {
         if (err) throw err;
         res.forEach(element => {
             roleArr.push(element.title)
         });
     });
-    connection.query("SELECT * FROM employees", function(err, res) {
+    connection.query("SELECT * FROM employees", function (err, res) {
         if (err) throw err;
         res.forEach(element => {
             managerArr.push(
@@ -141,7 +141,7 @@ function addEmployee() {
         {
             type: "list",
             name: "manager",
-            choices: function() {
+            choices: function () {
                 let managerNames = [];
                 managerArr.forEach(element => {
                     managerNames.push(element.name)
@@ -157,7 +157,7 @@ function addEmployee() {
         let roleID;
 
         if (response.manager === "No manager") {
-            connection.query("SELECT roleID FROM roles WHERE title = ?", response.role, function(err, res) {
+            connection.query("SELECT roleID FROM roles WHERE title = ?", response.role, function (err, res) {
                 if (err) throw err;
                 roleID = res[0].roleID;
                 newEmployee = {
@@ -165,19 +165,19 @@ function addEmployee() {
                     last_name: response.lastName,
                     role_id: roleID,
                 }
-                connection.query("INSERT INTO employees SET ?", newEmployee, function(err, res) {
+                connection.query("INSERT INTO employees SET ?", newEmployee, function (err, res) {
                     if (err) throw err;
                     console.log(res.affectedRows + " employee inserted!\n");
                     mainMenu();
                 });
             });
         } else {
-            connection.query("SELECT roleID FROM roles WHERE title = ?", response.role, function(err, res) {
+            connection.query("SELECT roleID FROM roles WHERE title = ?", response.role, function (err, res) {
                 if (err) throw err;
                 let managerID;
                 roleID = res[0].roleID;
                 managerArr.forEach(element => {
-                    if(element.name === response.firstName + " " + response.lastName) {
+                    if (element.name === response.firstName + " " + response.lastName) {
                         managerID = element.id;
                     }
                 });
@@ -187,7 +187,7 @@ function addEmployee() {
                     role_id: roleID,
                     manager_id: managerID
                 };
-                connection.query("INSERT INTO employees SET ?", newEmployee, function(err, emRes) {
+                connection.query("INSERT INTO employees SET ?", newEmployee, function (err, emRes) {
                     if (err) throw err;
                     console.log(res.affectedRows + " employee inserted!\n");
                     mainMenu();
@@ -199,7 +199,7 @@ function addEmployee() {
 
 function addRole() {
     let departmentArr = [];
-    connection.query("SELECT * FROM departments", function(err, res) {
+    connection.query("SELECT * FROM departments", function (err, res) {
         if (err) throw err;
         res.forEach(element => {
             departmentArr.push(element.name)
@@ -225,19 +225,90 @@ function addRole() {
     ]).then(response => {
         let depID;
         let newRole;
-        connection.query("SELECT departmentID FROM departments WHERE name = ?", response.department, function(err, res) {
-            if(err) throw err;
+        connection.query("SELECT departmentID FROM departments WHERE name = ?", response.department, function (err, res) {
+            if (err) throw err;
             depID = res[0].departmentID;
             newRole = {
                 title: response.newTitle,
                 salary: parseInt(response.salary),
                 department_id: depID
             }
-            connection.query("INSERT INTO roles SET ?", newRole, function(err, res) {
+            connection.query("INSERT INTO roles SET ?", newRole, function (err, res) {
                 if (err) throw err;
                 console.log(res.affectedRows + " department inserted!\n");
                 mainMenu();
             });
         });
+    });
+}
+
+function changeRole() {
+    let roleArr = [];
+    let employeeArr = [];
+    connection.query("SELECT * FROM employees", function(err, res) {
+        if (err) throw err;
+        res.forEach(element => {
+            employees.push(
+                {
+                    name: res.first_name + " " + res.last_name,
+                    id: res.employeeID
+                }
+            )
+        });
+    });
+    connection.query("SELECT * FROM roles", function(err, res) {
+        if (err) throw err;
+        res.forEach(element => {
+            roles.push(
+                {
+                    title: res.title,
+                    id: res.roleID
+                }
+            );
+        });
+    });
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "employee",
+            choices: function() {
+                let employeeNames = [];
+                employees.forEach(element => {
+                    employeeNames.push(element.name);
+                });
+                return employeeNames;
+            },
+            message: "Select an employee whose role needs to be changed."
+        },
+        {
+            type: "list",
+            name: "role",
+            choices: function() {
+                let roleTitles = [];
+                roles.forEach(element => {
+                    roleTitles.push(element.title);
+                });
+                return roleTitles;
+            },
+            message: "Select a new role for the employee."
+        }
+    ]).then(response => {
+        let employeeID;
+        employeeArr.forEach(element => {
+            if (element.name === response.employee) {
+                employeeID = { employeeID: element.id};
+            }
+        });
+        let newRoleID;
+        roleArr.forEach(element => {
+            if (element.title === response.role) {
+                newRoleID = { role_id: element.id};
+            }
+        });
+        connection.query("UPDATE eployees SET ? WHERE ?", newRoleID, employeeID, function(err, res) {
+            if (err) throw err;
+            console.log(res.affectedRows + " employee updated!\n");
+            mainMenu();
+        }
     });
 }
