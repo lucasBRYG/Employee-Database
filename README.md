@@ -37,7 +37,7 @@ Follow the prompts to add or view data.
 
 Select "Exit Employee Tracker", or enter "ctrl+c" into the cli, to end the application.
 
-## Images
+## Screenshots
 
 
 
